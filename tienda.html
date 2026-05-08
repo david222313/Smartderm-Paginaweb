@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tienda Mes de la Madre – SmartDerm</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --pink:#e91e8c; --dark-pink:#880e4f; --light-pink:#fce4ec;
+  --teal:#2ED1C3; --navy:#0F2A44;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#fdf6fb;color:#333}
+
+/* NAV */
+.shop-nav{background:var(--navy);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.shop-nav img{height:40px;object-fit:contain}
+.nav-back{color:#fff;text-decoration:none;font-size:.9rem;display:flex;align-items:center;gap:8px;opacity:.8;transition:.2s;font-weight:600}
+.nav-back:hover{opacity:1;color:var(--teal)}
+
+/* HERO */
+.hero-tienda{background:linear-gradient(135deg,#fce4ec 0%,#f8bbd0 55%,#f48fb1 100%);padding:64px 20px 44px;text-align:center;border-bottom:4px solid var(--pink)}
+.badge-mes{background:var(--pink);color:#fff;font-size:12px;font-weight:700;padding:5px 18px;border-radius:20px;letter-spacing:1.2px;text-transform:uppercase;display:inline-block;margin-bottom:16px}
+.hero-tienda h1{font-size:2.8rem;font-weight:900;color:var(--dark-pink);line-height:1.12;margin-bottom:10px}
+.hero-tienda p{font-size:1.05rem;color:#6a1b4d;max-width:620px;margin:0 auto 24px}
+.benefits-row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:20px}
+.benefit-pill{background:#fff;border:2px solid var(--pink);border-radius:30px;padding:9px 20px;font-size:.87rem;font-weight:700;color:var(--dark-pink);display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(233,30,140,.12)}
+
+/* DISCOUNT BADGES */
+.disc-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:14px 20px;background:#fff;border-bottom:1px solid #fce4ec;position:sticky;top:64px;z-index:100}
+.disc-pill{background:#fce4ec;border:2px solid #f8bbd0;color:var(--dark-pink);font-size:.82rem;font-weight:700;padding:6px 16px;border-radius:20px;cursor:pointer;transition:.2s;user-select:none}
+.disc-pill:hover,.disc-pill.active{background:var(--pink);border-color:var(--pink);color:#fff}
+
+/* CAT FILTER */
+.cat-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:10px 20px;background:#fff9fc;border-bottom:1px solid #fce4ec}
+.cat-pill{background:transparent;border:1.5px solid #f8bbd0;color:#888;font-size:.78rem;font-weight:600;padding:5px 14px;border-radius:16px;cursor:pointer;transition:.2s}
+.cat-pill:hover,.cat-pill.active{background:var(--dark-pink);border-color:var(--dark-pink);color:#fff}
+
+/* CONTAINER */
+.tienda-wrap{max-width:1200px;margin:0 auto;padding:36px 20px 60px}
+.section-label{font-size:1.1rem;font-weight:800;color:var(--dark-pink);margin:40px 0 18px;padding:0 0 8px 14px;border-left:4px solid var(--pink)}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:22px}
+
+/* CARD */
+.product-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 18px rgba(233,30,140,.09);border:1px solid #fce4ec;display:flex;flex-direction:column;transition:transform .22s,box-shadow .22s}
+.product-card:hover{transform:translateY(-6px);box-shadow:0 14px 36px rgba(233,30,140,.18)}
+.product-card[style*="display: none"]{display:none!important}
+
+.product-img-wrap{position:relative;height:220px;overflow:hidden;background:#f8f0f4}
+.product-img{width:100%;height:100%;object-fit:contain;object-position:center;padding:10px;transition:transform .3s}
+.product-card:hover .product-img{transform:scale(1.05)}
+.discount-ribbon{position:absolute;top:12px;right:12px;background:var(--dark-pink);color:#fff;font-size:.78rem;font-weight:800;padding:4px 12px;border-radius:12px;letter-spacing:.3px}
+.discount-ribbon.high{background:linear-gradient(135deg,#880e4f,#4a0030)}
+
+.product-body{padding:16px;flex:1;display:flex;flex-direction:column;gap:6px}
+.product-brand{font-size:.7rem;font-weight:800;color:var(--pink);text-transform:uppercase;letter-spacing:.8px}
+.product-name{font-size:.97rem;font-weight:700;color:#222;line-height:1.3}
+.product-desc{font-size:.82rem;color:#555;line-height:1.55;flex:1}
+.product-ingredients{font-size:.75rem;color:#999;border-top:1px solid #fce4ec;padding-top:8px;margin-top:4px}
+.product-ingredients strong{color:#666}
+.btn-pedir{display:block;background:linear-gradient(135deg,var(--pink),var(--dark-pink));color:#fff;border:none;padding:10px 0;border-radius:10px;font-size:.87rem;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;margin-top:10px;transition:.18s}
+.btn-pedir:hover{opacity:.88;transform:scale(1.02)}
+
+/* OBSEQUIO */
+.obsequio-banner{background:linear-gradient(135deg,#4a0030,var(--dark-pink),var(--pink));border-radius:20px;padding:40px 30px;text-align:center;margin:52px 0 24px;position:relative;overflow:hidden}
+.obsequio-banner::before{content:'🎁';position:absolute;font-size:9rem;opacity:.07;right:-10px;top:-20px;line-height:1;pointer-events:none}
+.obsequio-banner h2{color:#fff;font-size:1.9rem;font-weight:900;margin-bottom:8px}
+.obsequio-banner p{color:rgba(255,255,255,.82);font-size:.97rem;margin-bottom:18px}
+.obsequio-amount{display:inline-block;background:#fff;color:var(--dark-pink);font-size:1.6rem;font-weight:900;padding:10px 34px;border-radius:50px;margin-bottom:12px}
+
+/* IA SECTION */
+.ia-section{background:linear-gradient(135deg,var(--navy),#1a3d5c);border-radius:20px;padding:46px 30px;text-align:center;margin:0 0 50px}
+.ia-section h2{color:#fff;font-size:1.7rem;font-weight:800;margin:12px 0 10px}
+.ia-section p{color:#a8d8d4;font-size:.97rem;margin-bottom:22px;max-width:560px;margin-left:auto;margin-right:auto}
+.btn-ia{display:inline-block;background:var(--teal);color:var(--navy);font-weight:800;font-size:1rem;padding:14px 36px;border-radius:30px;text-decoration:none;box-shadow:0 6px 20px rgba(46,209,195,.3)}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:60px 20px;color:#aaa;font-size:1rem;display:none}
+
+/* FOOTER */
+.shop-footer{background:var(--navy);color:rgba(255,255,255,.6);text-align:center;padding:18px;font-size:.82rem}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .hero-tienda h1{font-size:2rem}
+  .product-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .product-img-wrap{height:160px}
+  .product-body{padding:12px}
+  .disc-row{top:56px}
+}
+@media(max-width:380px){
+  .product-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="shop-nav">
+  <a href="index.html"><img src="data:image/jpeg;base64,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" alt="SmartDerm"></a>
+  <a href="index.html" class="nav-back"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero-tienda">
+  <div class="badge-mes">💐 Mes de la Madre 2026</div>
+  <h1>Tienda Dermatológica<br>SmartDerm</h1>
+  <p>Productos seleccionados por especialistas dermatólogos, con los mejores descuentos del año. Solo durante el Mes de la Madre.</p>
+  <div class="benefits-row">
+    <div class="benefit-pill"><i class="fas fa-truck" style="color:var(--pink)"></i> Domicilio gratis</div>
+    <div class="benefit-pill"><i class="fas fa-gift" style="color:var(--pink)"></i> Regalo desde $300.000</div>
+    <div class="benefit-pill"><i class="fas fa-tag" style="color:var(--pink)"></i> Hasta 60% OFF</div>
+    <div class="benefit-pill"><i class="fas fa-user-md" style="color:var(--pink)"></i> Avalado por dermatólogos</div>
+  </div>
+</div>
+
+<!-- DISCOUNT FILTER -->
+<div class="disc-row">
+  <span style="font-size:.8rem;color:#999;font-weight:600;align-self:center;margin-right:4px">Descuento:</span>
+  <div class="disc-pill active" onclick="filterAll(this)">Todos</div>
+  <div class="disc-pill" onclick="filterDisc('10',this)">10% OFF</div>
+  <div class="disc-pill" onclick="filterDisc('20',this)">20% OFF</div>
+  <div class="disc-pill" onclick="filterDisc('30',this)">30% OFF</div>
+  <div class="disc-pill" onclick="filterDisc('40',this)">40% OFF</div>
+  <div class="disc-pill" onclick="filterDisc('50',this)">50% OFF</div>
+  <div class="disc-pill" onclick="filterDisc('60',this)">60% OFF</div>
+</div>
+
+<!-- CATEGORY FILTER -->
+<div class="cat-row">
+  <span style="font-size:.78rem;color:#bbb;font-weight:600;align-self:center;margin-right:4px">Categoría:</span>
+  <div class="cat-pill active" onclick="filterCat('all',this)">Todos</div>
+  <div class="cat-pill" onclick="filterCat('serums',this)">Sérums</div>
+  <div class="cat-pill" onclick="filterCat('solar',this)">Solar</div>
+  <div class="cat-pill" onclick="filterCat('limpieza',this)">Limpieza</div>
+  <div class="cat-pill" onclick="filterCat('antiedad',this)">Antiedad</div>
+  <div class="cat-pill" onclick="filterCat('especializada',this)">Especializada</div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="tienda-wrap">
+  <div id="all-products">
+
+  <div class="section-label">🔬 Sérums & Tratamientos Activos</div>
+  <div class="product-grid">
+    <div class="product-card" data-discount="30" data-category="serums">
+      <div class="product-img-wrap">
+        <img class="product-img" 
+          src="https://www.laroche-posay.us/dw/image/v2/AANG_PRD/on/demandware.static/-/Sites-lrp-us-master-catalog/default/dwf9b3c73b/images/large/Hyalu-B5-serum-30ml-3337875818551.jpg" 
+          alt="Hyalu B5 Suractivated Serum"
+          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f5eef8' width='400' height='300'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%23880e4f' font-family='sans-serif' font-weight='bold'%3ELa Roche-Posay%3C/text%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='12' fill='%23c2185b' font-family='sans-serif'%3Eimagen no disponible%3C/text%3E%3C/svg%3E'"
+          loading="lazy">
+        <span class="discount-ribbon">30% OFF</span>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">La Roche-Posay</div>
+        <div class="product-name">Hyalu B5 Suractivated Serum</div>
+        <div class="product-desc">Concentrado antiarrugas que repara, reafirma y rellena líneas finas. Con 4 tipos de ácido hialurónico + Vitamina B5.</div>
+        <div class="product-ingredients"><strong>Activos:</strong> 4 tipos de ácido hialurónico · Vitamina B5 · Agua Termal La Roche-Posay</div>
+        <a href="contacto.html" class="btn-pedir">🛍️ Quiero este producto</a>
+      </div>
+    </div>
+    <div class="product-card" data-discount="40" data-category="serums">
+      <div class="product-img-wrap">
+        <img class="product-img" 
+          src="https://www.bioderma.es/sites/es/files/styles/product_mobile/public/sebium_serum.png" 
+          alt="Sébium Sérum Concentrado"
+          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f5eef8' width='400' height='300'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%23880e4f' font-family='sans-serif' font-weight='bold'%3EBioderma%3C/text%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='12' fill='%23c2185b' font-family='sans-serif'%3Eimagen no disponible%3C/text%3E%3C/svg%3E'"
+          loading="lazy">
+        <span class="discount-ribbon">40% OFF</span>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Bioderma</div>
+        <div class="product-name">Sébium Sérum Concentrado</div>
+        <div class="product-desc">Concentrado alisante anti-imperfecciones y antienvejecimiento. Reduce puntos negros, poros dilatados y marcas.</div>
+        <div class="product-ingredients"><strong>Activos:</strong> Ácido hialurónico · Ácido salicílico · Acetilglucosamina</div>
+        <a href="contacto.html" class="btn-pedir">🛍️ Quiero este producto</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">☀️ Fotoprotección</div>
+  <div class="product-grid">
+    <div class="product-card" data-discount="30" data-category="solar">
+      <div class="product-img-wrap">
+        <img class="product-img" 
+          src="https://www.avene.com/media/catalog/product/e/a/eau-thermale-avene-ultra-fluid-invisible-spf50-50ml-3282770011296.png" 
+          alt="Ultra Fluid SPF 50"
+          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f5eef8' width='400' height='300'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%23880e4f' font-family='sans-serif' font-weight='bold'%3EAvène%3C/text%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='12' fill='%23c2185b' font-family='sans-serif'%3Eimagen no disponible%3C/text%3E%3C/svg%3E'"
+          loading="lazy">
+        <span class="discount-ribbon">30% OFF</span>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Avène · Eau Thermale</div>
+        <div class="product-name">Ultra Fluid SPF 50</div>
+        <div class="product-desc">Fotoprotector ultraligero de alta protección para pieles normales a mixtas. Acabado ultra mate.</div>
+        <div class="product-ingredients"><strong>Activos:</strong> Filtros UVA/UVB/HEV · Blue Light 420 · Agua Termal Avène</div>
+        <a href="contacto.html" class="btn-pedir">🛍️ Quiero este producto</a>
+      </div>
+    </div>
+    <div class="product-card" data-discount="30" data-category="solar">
+      <div class="product-img-wrap">
+        <img class="product-img" 
+          src="https://www.avene.com/media/catalog/product/a/v/avene-anti-pigmentation-spf50-plus-tinted-fluid.jpg" 
+          alt="Anti-Pigmentación SPF 50+ Con Color"
+          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f5eef8' width='400' height='300'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%23880e4f' font-family='sans-serif' font-weight='bold'%3EAvène%3C/text%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='12' fill='%23c2185b' font-family='sans-serif'%3Eimagen no disponible%3C/text%3E%3C/svg%3E'"
+          loading="lazy">
+        <span class="discount-ribbon">30% OFF</span>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Avène · Eau Thermale</div>
+        <div class="product-name">Anti-Pigmentación SPF 50+ Con Color</div>
+        <div class="product-desc">Fluido solar con color que previene y corrige manchas pigmentarias. Protección muy alta con tecnología TriAsorB™ + AzA.</div>
+        <div class="product-ingredients"><strong>Activos:</strong> TriAsorB™ · AzA (Azeloglicina) · Filtros UVA/UVB/AOx · HEV Blue Light 420</div>
+        <a href="contacto.html" class="btn-pedir">🛍️ Quiero este producto</a>
+      </div>
+    </div>
+    <div class="product-card" data-discount="50" data-category="solar">
+      <div class="product-img-wrap">
+        <img class="product-img" 
+          src="https://www.eucerin.co.uk/-/media/project/loreal/brand-sites/eucerin/emea/uk-ie/product-images/new-products/eucerin-sun-fluid-photoaging-control-spf50.png" 
+          alt="Sun Fluid Photoaging Control SPF 50+"
+          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f5eef8' width='400' height='300'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%23880e4f' font-family='sans-serif' font-weight='bold'%3EEucerin%3C/text%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='12' fill='%23c2185b' font-family='sans-serif'%3Eimagen no disponible%3C/text%3E%3C/svg%3E'"
+          loading="lazy">
+        <span class="discount-ribbon">50% OFF</span>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Eucerin</div>
+        <div class="product-name">Sun Fluid Photoaging Control SPF 50+</div>
+        <div class="product-desc">Fluido solar antiedad de amplio espectro. Previene el fotoenvejecimiento y las manchas solares. Textura no grasa.</div>
+        <div class="product-ingredients"><strong>Activos:</strong> Tecnología Advanced Spectral · Filtros UVA/UVB broad spectrum · PA++++</div>
+        <a href="contacto.html" class="btn-pedir">🛍️ Quiero este producto</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">💧 Limpieza e Hidratación Esencial</div>
+  <div class="product-grid">
+    <div class="product-card" data-discount="20" data-category="limpieza">
+      <div class="product-img-wrap">
+        <img class="product-img" 
+          src="https://www.cetaphil.com/dw/image/v2/AANG_PRD/on/demandware.static/-/Sites-us-cetaphil-master-catalog/default/dw93a5bf99/images/hi-res/302994016_P1.jpg" 
+          alt="Limpiador Facial Diario Piel Grasa"
+          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f5eef8' width='400' height='300'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%23880e4f' font-family='sans-serif' font-weight='bold'%3ECetaphil%3C/text%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='12' fill='%23c2185b' font-family='sans-serif'%3Eimagen no disponible%3C/text%3E%3C/svg%3E'"
+          loading="lazy">
+        <span class="discount-ribbon">20% OFF</span>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Cetaphil</div>
+        <div class="product-name">Limpiador Facial Diario Piel Grasa</div>
+        <div class="product-desc">Limpia profundamente minimizando poros sin afectar la hidratación. Para piel mixta a grasa y sensible.</div>
+        <div class="product-ingredients"><strong>Activos:</strong> Vitamina B5 · Pro-Vitamina B6 · Fórmula suave no comedogénica</div>
+        <a href="contacto.html" class="btn-pedir">🛍️ Quiero este producto</a>
+      </div>
+    </div>
+    <div class="product-card" data-discount="20" data-category="limpieza">
+      <div class="product-img-wrap">
+        <img class="product-img" 
+          src="https://www.cerave.com/-/media/project/loreal/brand-sites/cerave/americas/us/products-images/moisturizing-cream/700x875/cerave_moisturizing_cream_16oz_tub_with_texture_700x875.jpg" 
+          alt="Moisturising Cream – Crema Hidratante"
+          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f5eef8' width='400' height='300'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%23880e4f' font-family='sans-serif' font-weight='bold'%3ECeraVe%3C/text%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='12' fill='%23c2185b' font-family='sans-serif'%3Eimagen no disponible%3C/text%3E%3C/svg%3E'"
+          loading="lazy">
+        <span class="discount-ribbon">20% OFF</span>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">CeraVe</div>
+        <div class="product-name">Moisturising Cream – Crema Hidratante</div>
+        <div class="product-desc">Crema hidratante para cara y cuerpo. Desarrollada con dermatólogos. Hidratación de larga duración para piel seca y muy seca.</div>
+        <div class="product-ingredients"><strong>Activos:</strong> 3 ceramidas esenciales · Ácido hialurónico · Tecnología MVE de liberación controlada</div>
+        <a href="contacto.html" class="btn-pedir">🛍️ Quiero este producto</a>
+      </div>
+    </div>
+    <div class="product-card" data-discount="20" data-category="limpieza">
+      <div class="product-img-wrap">
+        <img class="product-img" 
+          src="https://www.uriage.com/medias/sys_master/images/images/hf5/hf3/8905539567646/Creme-Lavante-500ml.jpg" 
+          alt="Crème Lavante – Crema Limpiadora 500ml"
+          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f5eef8' width='400' height='300'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%23880e4f' font-family='sans-serif' font-weight='bold'%3EUriage%3C/text%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='12' fill='%23c2185b' font-family='sans-serif'%3Eimagen no disponible%3C/text%3E%3C/svg%3E'"
+          loading="lazy">
+        <span class="discount-ribbon">20% OFF</span>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Uriage · Eau Thermale</div>
+        <div class="product-name">Crème Lavante – Crema Limpiadora 500ml</div>
+        <div class="product-desc">Crema limpiadora de uso diario para cara, cuerpo y cabello. Piel sensible. 92% ingredientes de origen natural.</div>
+        <div class="product-ingredients"><strong>Activos:</strong> Agua Termal de los Alpes · 92% origen natural · Activos suavizantes y nutritivos</div>
+        <a href="contacto.html" class="btn-pedir">🛍️ Quiero este producto</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">✨ Antiedad Premium</div>
+  <div class="product-grid">
+    <div class="product-card" data-discount="50" data-category="antiedad">
+      <div class="product-img-wrap">
+        <img class="product-img" 
+          src="https://www.avene.com/media/catalog/product/a/v/avene-hyaluron-activ-b3-nuit.jpg" 
+          alt="Hyaluron Activ B3 Crème Multi-Intensive Nuit"
+          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f5eef8' width='400' height='300'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%23880e4f' font-family='sans-serif' font-weight='bold'%3EAvène%3C/text%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='12' fill='%23c2185b' font-family='sans-serif'%3Eimagen no disponible%3C/text%3E%3C/svg%3E'"
+          loading="lazy">
+        <span class="discount-ribbon">50% OFF</span>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">Avène · Eau Thermale</div>
+        <div class="product-name">Hyaluron Activ B3 Crème Multi-Intensive Nuit</div>
+        <div class="product-desc">Crema de noche multiintensiva que combate las arrugas, repara y reforma la piel durante el descanso.</div>
+        <div class="product-ingredients"><strong>Activos:</strong> Ácido hialurónico · Niacinamida (B3) · Fórmula Exclusiva · Agua Termal Avène</div>
+        <a href="contacto.html" class="btn-pedir">🛍️ Quiero este producto</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">🧬 Línea Especializada</div>
+  <div class="product-grid">
+    <div class="product-card" data-discount="60" data-category="especializada">
+      <div class="product-img-wrap">
+        <img class="product-img" 
+          src="https://pielfarmaceutica.com/wp-content/uploads/2022/07/hydramed-manos-65g.jpg" 
+          alt="Hydramed Manos – Emoliente Extra Hidratante"
+          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f5eef8' width='400' height='300'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%23880e4f' font-family='sans-serif' font-weight='bold'%3EPharmaDerm%3C/text%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='12' fill='%23c2185b' font-family='sans-serif'%3Eimagen no disponible%3C/text%3E%3C/svg%3E'"
+          loading="lazy">
+        <span class="discount-ribbon">60% OFF</span>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">PharmaDerm</div>
+        <div class="product-name">Hydramed Manos – Emoliente Extra Hidratante</div>
+        <div class="product-desc">Crema emoliente extra hidratante para manos. Repara y protege la piel reseca y agrietada. Uso diario.</div>
+        <div class="product-ingredients"><strong>Activos:</strong> Urea · Dexpantenol · Glicerina · Vitamina E</div>
+        <a href="contacto.html" class="btn-pedir">🛍️ Quiero este producto</a>
+      </div>
+    </div>
+    <div class="product-card" data-discount="60" data-category="especializada">
+      <div class="product-img-wrap">
+        <img class="product-img" 
+          src="https://pielfarmaceutica.com/wp-content/uploads/2022/07/retimax-bio-50gr.jpg" 
+          alt="Retimax Bio"
+          onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect fill='%23f5eef8' width='400' height='300'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%23880e4f' font-family='sans-serif' font-weight='bold'%3EPharmaDerm%3C/text%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='12' fill='%23c2185b' font-family='sans-serif'%3Eimagen no disponible%3C/text%3E%3C/svg%3E'"
+          loading="lazy">
+        <span class="discount-ribbon">60% OFF</span>
+      </div>
+      <div class="product-body">
+        <div class="product-brand">PharmaDerm</div>
+        <div class="product-name">Retimax Bio</div>
+        <div class="product-desc">Crema con retinoide de nueva generación para renovación celular, reducción de arrugas y tratamiento del acné.</div>
+        <div class="product-ingredients"><strong>Activos:</strong> Retinol Bio · Vitamina E · Complejo hidratante</div>
+        <a href="contacto.html" class="btn-pedir">🛍️ Quiero este producto</a>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <p class="no-results" id="no-results">No hay productos con ese filtro. <a href="#" onclick="resetFilters();return false;">Ver todos</a></p>
+
+  <!-- OBSEQUIO -->
+  <div class="obsequio-banner">
+    <h2>🎁 Obsequio especial</h2>
+    <div class="obsequio-amount">Compras desde $300.000</div>
+    <p>Recibe un regalo dermatológico sorpresa seleccionado por nuestros especialistas.</p>
+    <p style="color:rgba(255,255,255,.55);font-size:.8rem;margin-top:4px">+ Domicilio completamente gratis en toda Colombia</p>
+  </div>
+
+<div class="shop-footer">© 2026 SmartDerm · Todos los derechos reservados · Oferta válida solo durante el Mes de la Madre</div>
+
+<script>
+let activeDisc = 'all';
+let activeCat  = 'all';
+
+function applyFilters() {
+  const cards = document.querySelectorAll('.product-card');
+  let visible = 0;
+  cards.forEach(c => {
+    const discOk = activeDisc === 'all' || c.dataset.discount === activeDisc;
+    const catOk  = activeCat  === 'all' || c.dataset.category  === activeCat;
+    const show   = discOk && catOk;
+    c.style.display = show ? 'flex' : 'none';
+    if (show) visible++;
+  });
+  // Hide empty section labels
+  document.querySelectorAll('.section-label').forEach(lbl => {
+    const grid = lbl.nextElementSibling;
+    if (!grid) return;
+    const hasVisible = [...grid.querySelectorAll('.product-card')].some(c => c.style.display !== 'none');
+    lbl.style.display = hasVisible ? '' : 'none';
+    grid.style.display = hasVisible ? '' : 'none';
+  });
+  document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+}
+
+function filterDisc(d, el) {
+  activeDisc = d;
+  document.querySelectorAll('.disc-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+function filterAll(el) {
+  activeDisc = 'all';
+  document.querySelectorAll('.disc-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+function filterCat(c, el) {
+  activeCat = c;
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+function resetFilters() {
+  activeDisc = activeCat = 'all';
+  document.querySelectorAll('.disc-pill, .cat-pill').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.disc-pill')[0].classList.add('active');
+  document.querySelectorAll('.cat-pill')[0].classList.add('active');
+  applyFilters();
+}
+</script>
+</body>
+</html>
